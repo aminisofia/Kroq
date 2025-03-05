@@ -3,10 +3,21 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "overworld.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "overworld.tmx": {
+            "scale": 4,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 287.75,
+                "y": 282.375
+            }
+        },
+        "overworld.tmx#overworld": {
+            "scaleInDock": 5.5
+        }
     },
     "last.exportedFilePath": "C:/Users/milo/Documents/GitHub/UCSC-CMPM120/Kroq/assets/tilemap",
     "last.imagePath": "C:/Users/milo/Documents/GitHub/UCSC-CMPM120/Kroq/assets/sprites",
@@ -17,9 +28,11 @@
     "map.tileWidth": 16,
     "map.width": 60,
     "openFiles": [
+        "overworld.tmx"
     ],
     "project": "kroq.tiled-project",
     "recentFiles": [
+        "overworld.tmx"
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
