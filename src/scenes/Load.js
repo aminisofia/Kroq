@@ -19,12 +19,12 @@ class Load extends Phaser.Scene {
             loadingBar.destroy();
         });
 
-        this.load.path = '/assets/sprites/';
-        this.load.image('kroq', 'baseKroq.png');
+        // this.load.path = 'assets/sprites/';
+        this.load.image('kroq', 'assets/sprites/baseKroq.png');
 
-        this.load.image('tilesetImage', 'platform.png')
-        this.load.path = '/assets/tilemap/';
-        this.load.tilemapTiledJSON('tilemapJSON', 'overworld.json')
+        this.load.image('tilesetImage', '/assets/sprites/platform.png')
+        // this.load.path = 'assets/tilemap/';
+        this.load.tilemapTiledJSON('tilemapJSON', './assets/tilemap/overworld.json')
     }
 
     create() {
