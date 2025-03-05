@@ -12,7 +12,8 @@ let config = {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [ Load, Play ]
+    scene: [ Load, Play ],
+    base: '/Kroq/'
 };
 
 let game = new Phaser.Game(config);
