@@ -1,8 +1,10 @@
 class Camera {
-    constructor(camera) {
+    constructor(scene, camera) {
+        this.scene = scene;
         this.camera = camera;
         this.camera.setBackgroundColor("#51A9B5");
         this.follow = null;
+        this.scale = 4;
     }
 
     update() {
@@ -12,7 +14,7 @@ class Camera {
             this.camera.scrollX += this.follow.x;
             this.camera.scrollY += 346 - 40; // this.follow.y;
         }
-        this.camera.setZoom(4);
+        this.camera.setZoom(this.scale);
     }
 
     setFollow(object) {

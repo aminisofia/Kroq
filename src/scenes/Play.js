@@ -1,6 +1,9 @@
 class Play extends Phaser.Scene {
+
     constructor() {
         super('playScene');
+
+        Play.instance = this;
     }
 
     init() {
@@ -20,7 +23,7 @@ class Play extends Phaser.Scene {
         this.keys.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keys.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-        this.camera = new Camera(this.cameras.main);
+        this.camera = new Camera(this, this.cameras.main);
 
         const map = this.add.tilemap('tilemapJSON');
         const tileset = map.addTilesetImage('overworld', 'tilesetImage');
@@ -35,6 +38,9 @@ class Play extends Phaser.Scene {
         this.tilemap = map;
 
         this.camera.setFollow(this.kroq);
+
+        this.scene.launch('uiScene');
+        this.scene.bringToTop('uiScene');
 
     }
 

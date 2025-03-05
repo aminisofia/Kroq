@@ -21,6 +21,7 @@ class Load extends Phaser.Scene {
 
         // this.load.path = 'assets/sprites/';
         this.load.image('kroq', 'assets/sprites/baseKroq.png');
+        this.load.image('heart', 'assets/sprites/heart.png');
 
         this.load.image('tilesetImage', 'assets/sprites/platform.png')
         // this.load.path = 'assets/tilemap/';
