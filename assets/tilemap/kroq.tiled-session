@@ -8,11 +8,11 @@
     ],
     "fileStates": {
         "overworld.tmx": {
-            "scale": 4,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 88.5,
-                "y": 281.875
+                "x": 150.5,
+                "y": 246.25
             }
         },
         "overworld.tmx#overworld": {

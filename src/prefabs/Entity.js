@@ -3,6 +3,9 @@ class Entity extends Phaser.GameObjects.Sprite {
         super(scene, x, y, name);
         this.scene = scene;
         this.scene.add.existing(this);
+
+        this.spawnX = x;
+        this.spawnY = y;
         
         this.rx = x;
         this.ry = y;
@@ -17,13 +20,20 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.graphics.setDepth(10);
     }
 
-    physicsUpdate() {
+    reset() {
+        this.rx = this.spawnX;
+        this.ry = this.spawnY;
 
+        this.vx = 0;
+        this.vy = 0;
     }
+
+    physicsUpdate() {}
+    
     visualUpdate() {
         this.x = Math.round(this.rx);
         this.y = Math.round(this.ry);
-
+        
         if (this.vx > 0) {
             this.setScale(1, 1);
         }
@@ -33,9 +43,7 @@ class Entity extends Phaser.GameObjects.Sprite {
     }
 
     move(vx, vy) {
-        if (vx === 0 && vy === 0) return null;
-
-        let collide = null;
+        if (vx === 0 && vy === 0) return;
 
         let amm = Math.max(Math.abs(vx), Math.abs(vy));
         const extra = amm % 1;
@@ -48,14 +56,6 @@ class Entity extends Phaser.GameObjects.Sprite {
             if (!this.inTile()) {
                 this.rx += vx;
                 this.ry += vy;
-
-                if (collide !== null) {
-                    this.scene.entities.forEach(entity => {
-                        if (entity !== this && Entity.collides(this, entity)) {
-                            collide = entity;
-                        }
-                    });
-                }
             } else {
                 break;
             }
@@ -68,7 +68,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
         this.pushOut(vx, vy);
 
-        return collide;
+        return;
     }
 
     pushOut(vx, vy) {
@@ -219,15 +219,15 @@ class Entity extends Phaser.GameObjects.Sprite {
         const halfWidth2 = e2.w / 2;
         const halfHeight2 = e2.h / 2;
         
-        const left1 = e1.centerX - halfWidth1;
-        const right1 = e1.centerX + halfWidth1;
-        const top1 = e1.centerY - halfHeight1;
-        const bottom1 = e1.centerY + halfHeight1;
+        const left1 = e1.rx - halfWidth1;
+        const right1 = e1.rx + halfWidth1;
+        const top1 = e1.ry - halfHeight1;
+        const bottom1 = e1.ry + halfHeight1;
         
-        const left2 = e2.centerX - halfWidth2;
-        const right2 = e2.centerX + halfWidth2;
-        const top2 = e2.centerY - halfHeight2;
-        const bottom2 = e2.centerY + halfHeight2;
+        const left2 = e2.rx - halfWidth2;
+        const right2 = e2.rx + halfWidth2;
+        const top2 = e2.ry - halfHeight2;
+        const bottom2 = e2.ry + halfHeight2;
         
         return !(right1 <= left2 || left1 >= right2 || bottom1 <= top2 || top1 >= bottom2);
     }
