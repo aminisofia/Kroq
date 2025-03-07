@@ -25,19 +25,23 @@ class Play extends Phaser.Scene {
 
         this.camera = new Camera(this, this.cameras.main);
 
+        this.entities = [];
+
         const map = this.add.tilemap('tilemapJSON');
         const tileset = map.addTilesetImage('overworld', 'tilesetImage');
 
         map.createLayer('Decoration', tileset);
         const kroqSpawn = map.findObject('Objects', (object) => object.name === 'kroq-spawn');
-        this.kroq = new Kroq(this, kroqSpawn.x, kroqSpawn.y-10);
+        this.entities.push(new Kroq(this, kroqSpawn.x, kroqSpawn.y-10));
+        const birdSpawn = map.findObject('Objects', (object) => object.name === 'bird-spawn');
+        this.entities.push(new Bird(this, birdSpawn.x, birdSpawn.y-10));
         this.groundMap = map.createLayer('Ground', tileset);
         map.createLayer('DecoGround', tileset);
         map.createLayer('Water', tileset);
 
         this.tilemap = map;
 
-        this.camera.setFollow(this.kroq);
+        this.camera.setFollow(this.entities[0]);
 
         this.scene.launch('uiScene');
         this.scene.bringToTop('uiScene');
@@ -45,7 +49,12 @@ class Play extends Phaser.Scene {
     }
 
     physicsUpdate() {
-        this.kroq.physicsUpdate();
+        this.entities.forEach(entity => entity.physicsUpdate());
+    }
+
+    visualUpdate() {
+        this.entities.forEach(entity => entity.visualUpdate());
+        this.camera.update();
     }
 
     update(_, dt) {
@@ -62,7 +71,6 @@ class Play extends Phaser.Scene {
             this.timeCounter -= this.updateRate;
             this.physicsUpdate()
         }
-
-        this.camera.update();
+        this.visualUpdate();
     }
 }

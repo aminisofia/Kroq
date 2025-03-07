@@ -10,12 +10,32 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.w = w;
         this.h = h;
 
+        this.vx = 0;
+        this.vy = 0;
+
         this.graphics = this.scene.add.graphics();
         this.graphics.setDepth(10);
     }
 
+    physicsUpdate() {
+
+    }
+    visualUpdate() {
+        this.x = Math.round(this.rx);
+        this.y = Math.round(this.ry);
+
+        if (this.vx > 0) {
+            this.setScale(1, 1);
+        }
+        if (this.vx < 0) {
+            this.setScale(-1, 1);
+        }
+    }
+
     move(vx, vy) {
-        if (vx === 0 && vy === 0) return
+        if (vx === 0 && vy === 0) return null;
+
+        let collide = null;
 
         let amm = Math.max(Math.abs(vx), Math.abs(vy));
         const extra = amm % 1;
@@ -23,10 +43,19 @@ class Entity extends Phaser.GameObjects.Sprite {
 
         vx = Math.sign(vx);
         vy = Math.sign(vy);
+
         for (let i = 0; i < amm; i++) {
             if (!this.inTile()) {
                 this.rx += vx;
                 this.ry += vy;
+
+                if (collide !== null) {
+                    this.scene.entities.forEach(entity => {
+                        if (entity !== this && Entity.collides(this, entity)) {
+                            collide = entity;
+                        }
+                    });
+                }
             } else {
                 break;
             }
@@ -39,6 +68,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
         this.pushOut(vx, vy);
 
+        return collide;
     }
 
     pushOut(vx, vy) {
@@ -64,25 +94,33 @@ class Entity extends Phaser.GameObjects.Sprite {
         let x;
         if (vx !== 0) {
             let ox = vx > 0 ? -1 : 0;
-            x = Math.floor(vx * (this.w / 2 + ax - 1)) + ox + this.rx;
+            x = vx * (this.w / 2 + ax - 1) + ox + this.rx;
         } else {
             x = ax + this.rx;
         }
         let y;
         if (vy !== 0) {
             let oy = vy > 0 ? -1 : 0;
-            y = Math.floor(vy * (this.h / 2 + ay - 1)) + oy + this.ry;
+            y = vy * (this.h / 2 + ay - 1) + oy + this.ry;
         } else {
             y = ay + this.ry;
         }
 
     
         
-        let cx = Math.floor(x/16);
-        let cy = Math.floor(y/16);
+        const cx1 = Math.floor(Math.floor(x)/16);
+        const cy1 = Math.floor(Math.floor(y)/16);
+        const cx2 = Math.floor(Math.ceil(x)/16);
+        const cy2 = Math.floor(Math.ceil(y)/16);
 
-        let tile = this.scene.tilemap.getTileAt(cx, cy, true, this.scene.groundMap);
-        return tile === null || tile.index !== -1;
+        let tile11 = this.scene.tilemap.getTileAt(cx1, cy1, true, this.scene.groundMap);
+        let tile21 = this.scene.tilemap.getTileAt(cx2, cy1, true, this.scene.groundMap);
+        let tile12 = this.scene.tilemap.getTileAt(cx1, cy2, true, this.scene.groundMap);
+        let tile22 = this.scene.tilemap.getTileAt(cx2, cy2, true, this.scene.groundMap);
+        return tile11 === null || tile11.index !== -1 ||
+               tile21 === null || tile21.index !== -1 ||
+               tile12 === null || tile12.index !== -1 ||
+               tile22 === null || tile22.index !== -1;
     }
     inTile() {
         return this.inGround() || this.inRoof() || this.inLeft() || this.inRight();
@@ -125,14 +163,6 @@ class Entity extends Phaser.GameObjects.Sprite {
     inRight() {
         return this.inDirection(1, 0);
     }
-    updateVisualPosition() {
-        this.x = Math.round(this.rx);
-        this.y = Math.round(this.ry);
-        // this.x = (this.rx);
-        // this.y = (this.ry);
-    }
-
-    physicsUpdate() {}
 
     keyLeft() {return this.scene.keys.left.isDown || this.scene.keys.A.isDown; }
     keyRight() { return this.scene.keys.right.isDown || this.scene.keys.D.isDown; }
@@ -181,5 +211,24 @@ class Entity extends Phaser.GameObjects.Sprite {
         } else {
             this.downWasDown = false;
         }
+    }
+
+    static collides(e1, e2) {
+        const halfWidth1 = e1.w / 2;
+        const halfHeight1 = e1.h / 2;
+        const halfWidth2 = e2.w / 2;
+        const halfHeight2 = e2.h / 2;
+        
+        const left1 = e1.centerX - halfWidth1;
+        const right1 = e1.centerX + halfWidth1;
+        const top1 = e1.centerY - halfHeight1;
+        const bottom1 = e1.centerY + halfHeight1;
+        
+        const left2 = e2.centerX - halfWidth2;
+        const right2 = e2.centerX + halfWidth2;
+        const top2 = e2.centerY - halfHeight2;
+        const bottom2 = e2.centerY + halfHeight2;
+        
+        return !(right1 <= left2 || left1 >= right2 || bottom1 <= top2 || top1 >= bottom2);
     }
 }

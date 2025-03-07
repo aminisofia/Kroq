@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="2">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="60" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="3">
  <editorsettings>
   <export target="overworld.json" format="json"/>
  </editorsettings>
@@ -144,6 +144,9 @@
  </layer>
  <objectgroup id="5" name="Objects">
   <object id="1" name="kroq-spawn" x="160" y="296">
+   <point/>
+  </object>
+  <object id="2" name="bird-spawn" x="128" y="312">
    <point/>
   </object>
  </objectgroup>
