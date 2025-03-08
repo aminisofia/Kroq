@@ -131,7 +131,6 @@ class Kroq extends Entity {
         if (this.onRoof() && this.mount.stamina <= 0) {
             this.vy = 0;
             this.move(0, 1);
-            console.log("here!")
         }
 
         this.mount.rx = this.rx + 2 + this.vx;
