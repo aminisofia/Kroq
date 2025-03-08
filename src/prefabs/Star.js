@@ -1,7 +1,7 @@
 class Star extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "star", 10, 10);
-        console.log(scene)
+        // Settings for star
         this.t = 0;
         this.bobSpeed = 0.05;
     }
@@ -9,6 +9,7 @@ class Star extends Entity {
     physicsUpdate() {
         this.t += 1;
 
+        // Pickup logic
         this.pickup = true;
         this.getColliding().forEach(entity => {
             if (!this.pickup) return;
@@ -24,6 +25,7 @@ class Star extends Entity {
 
     visualUpdate() {
         this.x = Math.round(this.rx);
+        // Bob animation
         this.y = Math.round(this.ry + Math.sin(this.t * this.bobSpeed));
     }
 }

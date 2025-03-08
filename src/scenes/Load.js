@@ -19,6 +19,7 @@ class Load extends Phaser.Scene {
             loadingBar.destroy();
         });
 
+        // Load assets
         this.load.image('button-start', 'assets/sprites/startButton.png');
         this.load.image('button-credits', 'assets/sprites/creditsButton.png');
 

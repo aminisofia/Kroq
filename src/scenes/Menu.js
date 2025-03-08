@@ -6,13 +6,13 @@ class Menu extends Phaser.Scene {
         Menu.instance = this;
     }
 
-    init() {
-        
-    }
+    init() {}
 
     create() {
+        // Create camera
         this.camera = new Camera(this, this.cameras.main);
 
+        // Create buttons and set what they do on click
         let startButton = this.add.sprite(0, -9, "button-start").setInteractive();
         let creditsButton = this.add.sprite(0, 9, "button-credits").setInteractive();
 

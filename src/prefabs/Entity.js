@@ -4,6 +4,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.scene.add.existing(this);
 
+        // Setting params for custom calculations
         this.spawnX = x;
         this.spawnY = y;
         
@@ -16,10 +17,12 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.vx = 0;
         this.vy = 0;
 
+        // Creating graphics for testing
         this.graphics = this.scene.add.graphics();
         this.graphics.setDepth(10);
     }
 
+    // Function to set entity back to where it started
     reset() {
         this.rx = this.spawnX;
         this.ry = this.spawnY;
@@ -30,6 +33,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
     physicsUpdate() {}
     
+    // Function to place an entities sprite to it's location
     visualUpdate() {
         this.x = Math.round(this.rx);
         this.y = Math.round(this.ry);
@@ -42,6 +46,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         }
     }
 
+    // Function to move an entity to a specific location without moving through walls
     move(vx, vy) {
         if (vx === 0 && vy === 0) return;
 
@@ -71,6 +76,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         return;
     }
 
+    // This function checks if the entity is in a wall, and if it is, it pushes it fully out
     pushOut(vx, vy) {
         if (vx === 0 && vy === 0) {
             console.error("pushOut(): both vx and vy were zero!");
@@ -90,6 +96,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         }
     }
 
+    // This function checks if the tile at the specified location relative to the entity is a solid or not
     checkTile(vx, ax, vy, ay) { // true if you are in a wall
         let x;
         if (vx !== 0) {
@@ -122,6 +129,7 @@ class Entity extends Phaser.GameObjects.Sprite {
                tile12 === null || tile12.index !== -1 ||
                tile22 === null || tile22.index !== -1;
     }
+    // Below functions without comments are self explanitory through their names
     inTile() {
         return this.inGround() || this.inRoof() || this.inLeft() || this.inRight();
     }
@@ -213,6 +221,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         }
     }
 
+    // This function deletes the entity.
     delete() {
         const index = this.scene.entities.indexOf(this);
         if (index !== -1) {
@@ -221,6 +230,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         this.destroy();
     }
 
+    // This function gets a list of entities that this entity is colliding with
     getColliding() {
         const colliding = [];
         this.scene.entities.forEach(entity => {
@@ -231,6 +241,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         return colliding;
     }
 
+    // This function checks if two entities are colliding
     static collides(e1, e2) {
         const halfWidth1 = e1.w / 2;
         const halfHeight1 = e1.h / 2;
@@ -250,6 +261,7 @@ class Entity extends Phaser.GameObjects.Sprite {
         return !(right1 <= left2 || left1 >= right2 || bottom1 <= top2 || top1 >= bottom2);
     }
 
+    // This function takes inputs and tries to move an entity smoothly in the desired direction with the desired parameters
     static pushyMovement(d, v, moveSpeed, maxMoveSpeed, slowDownSpeed) {
         slowDownSpeed = slowDownSpeed ?? moveSpeed;
         if (d === 0 && v === 0) {

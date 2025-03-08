@@ -4,11 +4,14 @@ class Credits extends Phaser.Scene {
     }
 
     create() {
+        // Put 0, 0 at center of screen
         this.cameras.main.scrollX = -this.cameras.main.width / 2;
         this.cameras.main.scrollY = -this.cameras.main.height / 2;
 
+        // Graphcis for background color
         this.tintGraphics = this.add.graphics();
 
+        // Show credits text
         this.add.text(0, 0, 'CREDITS\n\nMilo Kesteloot, Sofia Aminifard\nSound: Pixabay\n\nESC to return', {
             fontFamily: 'picoo',
             fontSize: '64px',
@@ -21,6 +24,7 @@ class Credits extends Phaser.Scene {
 
     update(_, dt) {
     
+        // Key input handeling
         if (Phaser.Input.Keyboard.JustDown(this.keys.ESCKey)) {
             this.scene.start('menuScene');
         }

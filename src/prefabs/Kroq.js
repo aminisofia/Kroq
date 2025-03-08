@@ -2,6 +2,8 @@ class Kroq extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "kroq", 12, 12);
 
+        // Set up settings for player
+
         this.health = 3;
         this.stars = 0;
 
@@ -24,6 +26,7 @@ class Kroq extends Entity {
         this.graphics.fillStyle(0xff0000, 1);
     }
 
+    // This function handles all of Kroq's movement
     physicsUpdate() {
 
         // this.graphics.clear();
@@ -56,6 +59,7 @@ class Kroq extends Entity {
 
     }
 
+    // This function is the state machine case for when he is walking on the ground
     movementTypeControl() {
         let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
 
@@ -98,6 +102,7 @@ class Kroq extends Entity {
         })
     }
 
+    // This function puts Kroq on a bird
     mountBird(bird) {
         this.mount = bird;
         this.movementType = "ridingBird";
@@ -108,6 +113,7 @@ class Kroq extends Entity {
         this.mount.setScale(this.scaleX, 1)
     }
 
+    // This function is the state machine case for when he is riding on a bird
     movementTypeRidingBird() {
         let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
         this.vx = Entity.pushyMovement(dx, this.vx, this.mount.flySpeed, this.mount.maxFlySpeed);
@@ -131,6 +137,7 @@ class Kroq extends Entity {
         }
     }
     
+    // This function sets the direction of the mount (if it exists) to Kroq's direction
     visualUpdate() {
         super.visualUpdate();
         if (this.movementType === "ridingBird") {
@@ -144,18 +151,19 @@ class Kroq extends Entity {
         }
     }
 
-    movementTypeJump() {
-        if (this.keyUpClick() && (this.onGround() || this.coyoteTime > 0 || (this.vx > 0 && this.onRight()) || (this.vx < 0 && this.onLeft()))) {
-            this.vy = -this.jumpForce;
-            this.coyoteTime = 0;
+    // Test code for idea that we won't implument
+    // movementTypeJump() {
+    //     if (this.keyUpClick() && (this.onGround() || this.coyoteTime > 0 || (this.vx > 0 && this.onRight()) || (this.vx < 0 && this.onLeft()))) {
+    //         this.vy = -this.jumpForce;
+    //         this.coyoteTime = 0;
 
-            if (this.vx === 0) {
-                this.vx = this.moveSpeed;
-            } else if (this.vx > 0 && this.onRight()) {
-                this.vx = -this.moveSpeed;
-            } else if (this.vx < 0 && this.onLeft()) {
-                this.vx = this.moveSpeed;
-            }
-        }
-    }
+    //         if (this.vx === 0) {
+    //             this.vx = this.moveSpeed;
+    //         } else if (this.vx > 0 && this.onRight()) {
+    //             this.vx = -this.moveSpeed;
+    //         } else if (this.vx < 0 && this.onLeft()) {
+    //             this.vx = this.moveSpeed;
+    //         }
+    //     }
+    // }
 }

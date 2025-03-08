@@ -2,9 +2,7 @@ class Bird extends Entity {
     constructor(scene, x, y) {
         super(scene, x, y, "bird", 16, 18); // TODO actual height is 17 >:(
 
-        this.vx = 0;
-        this.vy = 0;
-
+        // Settings for bird
         this.flySpeed = 0.05;
         this.maxFlySpeed = 1;
         this.flyUpSpeed = 0.04;

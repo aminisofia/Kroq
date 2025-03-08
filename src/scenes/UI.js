@@ -5,17 +5,18 @@ class UI extends Phaser.Scene {
         UI.instance = this;
     }
 
-    init() {
-        
-    }
+    init() {}
 
     create() {
+        // Create all UI elements
         this.makeHeart(0);
         this.makeHeart(1);
         this.makeHeart(2);
+        // Store text element for star counter to modify later
         this.starText = this.makeStar();
     }
 
+    // Puts a specific index heart on screen
     makeHeart(i) {
         let heart = this.add.sprite(0, 0, 'heart');
         let scale = Play.instance.camera.scale;
@@ -24,6 +25,7 @@ class UI extends Phaser.Scene {
         heart.y = heart.height*scale;
     }
 
+    // Puts the UI star counter text and icon on screen
     makeStar() {
         let star = this.add.sprite(0, 0, 'star');
         let scale = Play.instance.camera.scale;

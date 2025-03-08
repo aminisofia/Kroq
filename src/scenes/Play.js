@@ -12,9 +12,11 @@ class Play extends Phaser.Scene {
 
     create() {
 
+        // Set up variables for consistent timing
         this.timeCounter = 0;
         this.updateRate = 1/120;
 
+        // Set up key inputs
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         this.keys.D = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -23,8 +25,10 @@ class Play extends Phaser.Scene {
         this.keys.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keys.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
+        // Create camera
         this.camera = new Camera(this, this.cameras.main);
 
+        // Create all elements
         this.entities = [];
 
         const map = this.add.tilemap('tilemapJSON');
@@ -56,16 +60,19 @@ class Play extends Phaser.Scene {
     }
 
     physicsUpdate() {
+        // Update all entities positions
         this.entities.forEach(entity => entity.physicsUpdate());
     }
 
     visualUpdate() {
+        // Put all entities where they should be on screen
         this.entities.forEach(entity => entity.visualUpdate());
         this.camera.update();
     }
 
     update(_, dt) {
 
+        // Handle scene key inputs
         if (Phaser.Input.Keyboard.JustDown(this.keys.R)) {
             this.scene.start('playScene');
             return;
@@ -76,9 +83,11 @@ class Play extends Phaser.Scene {
             return;
         }
 
+        // Set up timing for consistent time
         dt /= 1000;
         this.timeCounter += dt;
 
+        // This while loop loops every frame to make sure that the game runs the same speed for all players
         while (this.timeCounter >= this.updateRate) {
             this.timeCounter -= this.updateRate;
             this.physicsUpdate()
