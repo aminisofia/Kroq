@@ -213,6 +213,24 @@ class Entity extends Phaser.GameObjects.Sprite {
         }
     }
 
+    delete() {
+        const index = this.scene.entities.indexOf(this);
+        if (index !== -1) {
+            this.scene.entities.splice(index, 1);
+        }
+        this.destroy();
+    }
+
+    getColliding() {
+        const colliding = [];
+        this.scene.entities.forEach(entity => {
+            if (entity !== this && Entity.collides(this, entity)) {
+                colliding.push(entity);
+            }
+        });
+        return colliding;
+    }
+
     static collides(e1, e2) {
         const halfWidth1 = e1.w / 2;
         const halfHeight1 = e1.h / 2;
@@ -230,5 +248,26 @@ class Entity extends Phaser.GameObjects.Sprite {
         const bottom2 = e2.ry + halfHeight2;
         
         return !(right1 <= left2 || left1 >= right2 || bottom1 <= top2 || top1 >= bottom2);
+    }
+
+    static pushyMovement(d, v, moveSpeed, maxMoveSpeed, slowDownSpeed) {
+        slowDownSpeed = slowDownSpeed ?? moveSpeed;
+        if (d === 0 && v === 0) {
+            // Do nothing
+        } else if (d === Math.sign(v) || v === 0) {
+            v += d * moveSpeed;
+            if (v > maxMoveSpeed) v = maxMoveSpeed;
+            if (v <-maxMoveSpeed) v =-maxMoveSpeed;
+        } else if ((d === 0 && v !== 0) || (d < 0 && v > 0) || (d > 0 && v < 0)) {
+            if (v > 0) {
+                v -= slowDownSpeed;
+                if (v < 0) v = 0;
+            }
+            if (v < 0) {
+                v += slowDownSpeed;
+                if (v > 0) v = 0;
+            }
+        }
+        return v;
     }
 }

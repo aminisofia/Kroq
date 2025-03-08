@@ -29,19 +29,26 @@ class Play extends Phaser.Scene {
 
         const map = this.add.tilemap('tilemapJSON');
         const tileset = map.addTilesetImage('overworld', 'tilesetImage');
-
+        this.backgroundLayer = map.createLayer('Background', tileset);
         map.createLayer('Decoration', tileset);
         const kroqSpawn = map.findObject('Objects', (object) => object.name === 'kroq-spawn');
-        this.entities.push(new Kroq(this, kroqSpawn.x, kroqSpawn.y-10));
-        const birdSpawn = map.findObject('Objects', (object) => object.name === 'bird-spawn');
-        this.entities.push(new Bird(this, birdSpawn.x, birdSpawn.y-10));
+        this.kroq = new Kroq(this, kroqSpawn.x, kroqSpawn.y-10);
+        this.entities.push(this.kroq);
+        const birdSpawns = map.filterObjects('Objects', (object) => object.name === 'bird-spawn');
+        for (let birdSpawn of birdSpawns) {
+            this.entities.push(new Bird(this, birdSpawn.x, birdSpawn.y-10));
+        }
+        const starSpawns = map.filterObjects('Objects', (object) => object.name === 'star');
+        for (let starSpawn of starSpawns) {
+            this.entities.push(new Star(this, starSpawn.x, starSpawn.y));
+        }
         this.groundMap = map.createLayer('Ground', tileset);
         map.createLayer('DecoGround', tileset);
         map.createLayer('Water', tileset);
 
         this.tilemap = map;
 
-        this.camera.setFollow(this.entities[0]);
+        this.camera.setFollow(this.kroq);
 
         this.scene.launch('uiScene');
         this.scene.bringToTop('uiScene');

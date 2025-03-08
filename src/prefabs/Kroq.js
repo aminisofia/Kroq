@@ -3,6 +3,7 @@ class Kroq extends Entity {
         super(scene, x, y, "kroq", 12, 12);
 
         this.health = 3;
+        this.stars = 0;
 
         this.maxCoyoteTime = 5;
         this.coyoteTime = this.maxCoyoteTime;
@@ -61,22 +62,7 @@ class Kroq extends Entity {
         let movementMultiplyer = 1;
         if (!this.onGround()) movementMultiplyer = 0.5;
 
-        if (dx === 0 && this.vx === 0) {
-            // Do nothing
-        } else if (dx === Math.sign(this.vx) || this.vx === 0) {
-            this.vx += dx * this.moveSpeed * movementMultiplyer;
-            if (this.vx > this.maxMoveSpeed) this.vx = this.maxMoveSpeed;
-            if (this.vx <-this.maxMoveSpeed) this.vx =-this.maxMoveSpeed;
-        } else if ((dx === 0 && this.vx !== 0) || (dx < 0 && this.vx > 0) || (dx > 0 && this.vx < 0)) {
-            if (this.vx > 0) {
-                this.vx -= this.slowDownSpeed * movementMultiplyer;
-                if (this.vx < 0) this.vx = 0;
-            }
-            if (this.vx < 0) {
-                this.vx += this.slowDownSpeed * movementMultiplyer;
-                if (this.vx > 0) this.vx = 0;
-            }
-        }
+        this.vx = Entity.pushyMovement(dx, this.vx, this.moveSpeed*movementMultiplyer, this.maxMoveSpeed, this.slowDownSpeed*movementMultiplyer);
 
         if (this.onRoof()) {
             this.vy = 0;
@@ -104,55 +90,40 @@ class Kroq extends Entity {
             this.jumpTimer++;
         }
         
-
-        this.scene.entities.forEach(entity => {
-            if (entity !== this && Entity.collides(this, entity)) {
-                if (entity instanceof Bird) {
-                    if (this.vy > 0) {
-                        this.mountBird(entity);
-                        return;
-                    }
-                }
+        this.getColliding().forEach(entity => {
+            if (entity instanceof Bird && this.vy > 0) {
+                this.mountBird(entity);
+                return;
             }
-        });
+        })
     }
 
     mountBird(bird) {
         this.mount = bird;
         this.movementType = "ridingBird";
         
-        this.mount.stamina = 120;
+        this.mount.rx = this.rx;
+        this.mount.ry = this.ry + 9; // TODO kroq isn't lining up with bird for some reason
 
-        this.rx = this.mount.rx - 2;
-        this.ry = this.mount.ry - 9; // TODO kroq isn't lining up with bird for some reason
+        this.mount.setScale(this.scaleX, 1)
     }
 
     movementTypeRidingBird() {
         let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
-        this.vx = dx * this.mount.flySpeed;
-        // let dy = (this.keyUp() ? -1 : 0) + (this.keyDown() ? 1 : 0);
-        // let dy = 0;
-        // let dist = Math.sqrt(dx*dx + dy*dy);
-        // this.vx = 0;
-        // this.vy = 0;
-        // if (dist !== 0) {
-            // dx /= dist;
-            // dy /= dist;
-            // this.vx = dx * this.mount.flySpeed;
-            // this.vy = dy * this.mount.flySpeed;
-        // }
+        this.vx = Entity.pushyMovement(dx, this.vx, this.mount.flySpeed, this.mount.maxFlySpeed);
 
         if (this.mount.stamina > 0) {
-            this.vy = this.mount.flyUpSpeed;
+            this.vy = Entity.pushyMovement(-1, this.vy, this.mount.flyUpSpeed, this.mount.maxFlyUpSpeed, this.mount.flyUpSpeed*3);
             this.mount.stamina--;
         } else {
-            this.vy = this.mount.fallSpeed;
+            this.vy = Entity.pushyMovement(1, this.vy, this.mount.fallSpeed, this.mount.maxFallSpeed);
         }
 
         this.mount.rx = this.rx + 2 + this.vx;
         this.mount.ry = this.ry + 9 + this.vy; // TODO kroq isn't lining up with bird for some reason
 
-        if (this.onGround()) {
+
+        if (this.onGround() && this.mount.stamina === 0) {
             this.mount.reset();
             this.mount = null;
             this.movementType = "control";

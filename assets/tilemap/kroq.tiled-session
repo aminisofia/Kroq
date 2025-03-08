@@ -9,10 +9,10 @@
     "fileStates": {
         "overworld.tmx": {
             "scale": 2,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 150.5,
-                "y": 246.25
+                "x": 588.5,
+                "y": 231.25
             }
         },
         "overworld.tmx#overworld": {

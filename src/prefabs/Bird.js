@@ -5,13 +5,19 @@ class Bird extends Entity {
         this.vx = 0;
         this.vy = 0;
 
-        this.flySpeed = 1;
-        this.flyUpSpeed = -1.2;
-        this.fallSpeed = 0.5;
-        this.stamina = 120;
+        this.flySpeed = 0.05;
+        this.maxFlySpeed = 1;
+        this.flyUpSpeed = 0.04;
+        this.maxFlyUpSpeed = 1.2;
+        this.fallSpeed = 0.01;
+        this.maxFallSpeed = 0.4;
+        this.maxStamina = 102;
+        this.stamina = this.maxStamina;
+    }
 
-
-        this.graphics.fillStyle(0xff0000, 1);
+    reset() {
+        super.reset();
+        this.stamina = this.maxStamina;
     }
 
     physicsUpdate() {
