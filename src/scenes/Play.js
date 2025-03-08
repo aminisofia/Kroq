@@ -71,6 +71,11 @@ class Play extends Phaser.Scene {
             return;
         }
 
+        if (Phaser.Input.Keyboard.JustDown(this.keys.ESC)) {
+            this.scene.start('menuScene');
+            return;
+        }
+
         dt /= 1000;
         this.timeCounter += dt;
 

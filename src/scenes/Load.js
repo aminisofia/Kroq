@@ -19,6 +19,9 @@ class Load extends Phaser.Scene {
             loadingBar.destroy();
         });
 
+        this.load.image('button-start', 'assets/sprites/startButton.png');
+        this.load.image('button-credits', 'assets/sprites/creditsButton.png');
+
         // this.load.path = 'assets/sprites/';
         this.load.image('kroq', 'assets/sprites/baseKroq.png');
         this.load.image('bird', 'assets/sprites/bird.png');
@@ -28,9 +31,11 @@ class Load extends Phaser.Scene {
         this.load.image('tilesetImage', 'assets/sprites/platform.png')
         // this.load.path = 'assets/tilemap/';
         this.load.tilemapTiledJSON('tilemapJSON', 'assets/tilemap/overworld.json')
+
+        this.load.audio('starPickup', 'assets/sfx/starPickup.mp3');
     }
 
     create() {
-        this.scene.start('playScene');
+        this.scene.start('menuScene');
     }
 }

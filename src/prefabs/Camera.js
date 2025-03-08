@@ -18,7 +18,9 @@ class Camera {
             this.camera.scrollY += 346 - 40; // this.follow.y;
         }
         this.camera.setZoom(this.scale);
-        this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale;
+        if (this.scene.backgroundLayer !== undefined) {
+            this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale;
+        }
     }
 
     setFollow(object) {

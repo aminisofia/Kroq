@@ -11,7 +11,7 @@ class Bird extends Entity {
         this.maxFlyUpSpeed = 1.2;
         this.fallSpeed = 0.01;
         this.maxFallSpeed = 0.4;
-        this.maxStamina = 102;
+        this.maxStamina = 40;
         this.stamina = this.maxStamina;
     }
 

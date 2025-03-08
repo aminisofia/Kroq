@@ -12,7 +12,7 @@ let config = {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [ Load, UI, Play ],
+    scene: [ Load, Menu, UI, Play, Credits ],
     base: '/Kroq/'
 };
 

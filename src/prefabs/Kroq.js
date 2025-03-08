@@ -114,6 +114,7 @@ class Kroq extends Entity {
 
         if (this.mount.stamina > 0) {
             this.vy = Entity.pushyMovement(-1, this.vy, this.mount.flyUpSpeed, this.mount.maxFlyUpSpeed, this.mount.flyUpSpeed*3);
+            if (this.mount.y <= this.mount.spawnY)
             this.mount.stamina--;
         } else {
             this.vy = Entity.pushyMovement(1, this.vy, this.mount.fallSpeed, this.mount.maxFallSpeed);
