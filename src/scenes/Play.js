@@ -24,6 +24,7 @@ class Play extends Phaser.Scene {
         this.keys.S = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keys.ESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.keys.R = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        this.keys.SPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Create camera
         this.camera = new Camera(this, this.cameras.main);
@@ -86,11 +87,19 @@ class Play extends Phaser.Scene {
         // Set up timing for consistent time
         dt /= 1000;
         this.timeCounter += dt;
+        let loopSaftey = 30;
 
         // This while loop loops every frame to make sure that the game runs the same speed for all players
         while (this.timeCounter >= this.updateRate) {
             this.timeCounter -= this.updateRate;
             this.physicsUpdate()
+
+            loopSaftey--;
+            if (loopSaftey <= 0) {
+                console.warn("The time-keeping loop has exceeded the maximum loop allowance of 30. Time-skipping to present.");
+                this.timeCounter %= this.updateRate;
+                break;
+            }
         }
         this.visualUpdate();
     }

@@ -3,6 +3,10 @@
 // Date: 03/03/2025
 // Time: ~ 30 Hours
 
+// Controlls: Use WASD or Arrow Keys to move Kroq to the flag at the end!
+// Collect optional STARS for a fun challage!
+// Use ESC to return to the menu.
+
 'use strict'
 
 // General config

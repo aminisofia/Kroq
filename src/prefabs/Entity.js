@@ -174,7 +174,7 @@ class Entity extends Phaser.GameObjects.Sprite {
 
     keyLeft() {return this.scene.keys.left.isDown || this.scene.keys.A.isDown; }
     keyRight() { return this.scene.keys.right.isDown || this.scene.keys.D.isDown; }
-    keyUp() { return this.scene.keys.up.isDown || this.scene.keys.W.isDown; }
+    keyUp() { return this.scene.keys.up.isDown || this.scene.keys.W.isDown || this.scene.keys.SPACE.isDown; }
     keyDown() { return this.scene.keys.down.isDown || this.scene.keys.S.isDown; }
 
     keyLeftClick() {
