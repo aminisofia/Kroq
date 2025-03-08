@@ -81,6 +81,7 @@ class Kroq extends Entity {
         if (this.keyUp() && (((this.onGround() || this.coyoteTime > 0) && this.canUseJump) || (this.jumpTimer < this.maxJumpTime))) {
             if (this.onGround() || this.coyoteTime > 0) {
                 this.jumpTimer = 0;
+                this.scene.sound.add("kroqJump").setVolume(0.1).play();
             }
             this.canUseJump = false;
             this.vy = -this.jumpForce;
@@ -111,6 +112,8 @@ class Kroq extends Entity {
         this.mount.ry = this.ry + 9; // TODO kroq isn't lining up with bird for some reason
 
         this.mount.setScale(this.scaleX, 1)
+
+        this.scene.sound.add("birdFlap").setVolume(0.3).play();
     }
 
     // This function is the state machine case for when he is riding on a bird
@@ -120,10 +123,15 @@ class Kroq extends Entity {
 
         if (this.mount.stamina > 0) {
             this.vy = Entity.pushyMovement(-1, this.vy, this.mount.flyUpSpeed, this.mount.maxFlyUpSpeed, this.mount.flyUpSpeed*3);
-            if (this.mount.y <= this.mount.spawnY)
-            this.mount.stamina--;
+            if (this.mount.y <= this.mount.spawnY) this.mount.stamina--;
         } else {
             this.vy = Entity.pushyMovement(1, this.vy, this.mount.fallSpeed, this.mount.maxFallSpeed);
+        }
+
+        if (this.onRoof() && this.mount.stamina <= 0) {
+            this.vy = 0;
+            this.move(0, 1);
+            console.log("here!")
         }
 
         this.mount.rx = this.rx + 2 + this.vx;

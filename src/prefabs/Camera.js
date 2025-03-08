@@ -8,6 +8,18 @@ class Camera {
     }
 
     update() {
+        // this.scale = 
+        
+        // This code callibrates the proper scale for the screen size
+        let desiredHeight = 983.2000122070312; // My monitor height
+        let desiredScale = 4; // My monitor scale
+        let theirHeight = this.camera.height; // User monitor height
+        let theirScale = (desiredScale / desiredHeight) * theirHeight; // Solve for user scale
+
+        this.scale = theirScale;
+
+
+        // This code centeres the center of the screen on 0, 0 and follows whatever the variable this.follow is set to
         this.camera.scrollX = -this.camera.width / 2;
         this.camera.scrollY = -this.camera.height / 2;
         if (this.follow != null) {

@@ -34,6 +34,9 @@ class Load extends Phaser.Scene {
         this.load.tilemapTiledJSON('tilemapJSON', 'assets/tilemap/overworld.json')
 
         this.load.audio('starPickup', 'assets/sfx/starPickup.mp3');
+        this.load.audio('kroqJump', 'assets/sfx/jump.mp3');
+        this.load.audio('birdFlap', 'assets/sfx/birdFlap.mp3');
+
     }
 
     create() {
