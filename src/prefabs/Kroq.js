@@ -50,7 +50,7 @@ class Kroq extends Entity {
 
         if (this.onRoof() && this.vy < 0) {
             this.vy = 0;
-            console.log('HII!')
+            this.move(0, 1);
         }
         if (this.onGround() && this.vy > 0) {
             this.vy = 0;
@@ -70,9 +70,10 @@ class Kroq extends Entity {
 
         this.vx = Entity.pushyMovement(dx, this.vx, this.moveSpeed*movementMultiplyer, this.maxMoveSpeed, this.slowDownSpeed*movementMultiplyer);
 
-        if (this.onRoof()) {
+        if (this.onRoof() && this.vy < 0) {
             this.vy = 0;
             this.jumpTimer = this.maxJumpTime;
+            this.move(0, 1);
         }
         if (!this.keyUp()) {
             this.canUseJump = true;
