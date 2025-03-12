@@ -33,6 +33,9 @@ class Camera {
         if (this.scene.backgroundLayer !== undefined) {
             this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale;
         }
+        if (this.scene.cloudLayer !== undefined) {
+            this.scene.cloudLayer.x = (this.camera.scrollX+this.camera.width/2)/1.5 - this.camera.width/3/this.scale;
+        }
     }
 
     setFollow(object) {

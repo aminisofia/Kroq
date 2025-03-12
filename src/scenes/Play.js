@@ -34,6 +34,7 @@ class Play extends Phaser.Scene {
 
         const map = this.add.tilemap('tilemapJSON');
         const tileset = map.addTilesetImage('overworld', 'tilesetImage');
+        this.cloudLayer = map.createLayer('Clouds', tileset);
         this.backgroundLayer = map.createLayer('Background', tileset);
         map.createLayer('Decoration', tileset);
         const kroqSpawn = map.findObject('Objects', (object) => object.name === 'kroq-spawn');
