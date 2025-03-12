@@ -18,6 +18,8 @@ class Kroq extends Entity {
         this.moveSpeed = 0.05;
         this.slowDownSpeed = 0.1;
         this.maxMoveSpeed = 1;
+        this.onGroundTimer = 0;
+        this.maxOnGroundTimer = 50;
 
         this.mount = null;
 
@@ -43,14 +45,14 @@ class Kroq extends Entity {
             this.movementTypeRidingBird();
         }
 
-        this.move(this.vx, 0);
         this.move(0, this.vy);
+        this.move(this.vx, 0);
 
-        if (this.onRoof()) {
+        if (this.onRoof() && this.vy < 0) {
             this.vy = 0;
+            console.log('HII!')
         }
-
-        if (this.onGround()) {
+        if (this.onGround() && this.vy > 0) {
             this.vy = 0;
             this.coyoteTime = this.maxCoyoteTime;
         }
@@ -114,10 +116,13 @@ class Kroq extends Entity {
         this.mount.setScale(this.scaleX, 1)
 
         this.scene.sound.add("birdFlap").setVolume(0.3).play();
+
+        this.onGroundTimer = this.maxOnGroundTimer;
     }
 
     // This function is the state machine case for when he is riding on a bird
     movementTypeRidingBird() {
+
         let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
         this.vx = Entity.pushyMovement(dx, this.vx, this.mount.flySpeed, this.mount.maxFlySpeed);
 
@@ -136,12 +141,16 @@ class Kroq extends Entity {
         this.mount.rx = this.rx + 2 + this.vx;
         this.mount.ry = this.ry + 9 + this.vy; // TODO kroq isn't lining up with bird for some reason
 
+        if (this.onGround() && this.mount.stamina === 0 && this.vy >= 0) {
+            if (this.onGroundTimer) {
+                this.mount.reset();
+                this.mount = null;
+                this.movementType = "control";
+            } else {
+                this.onGroundTimer = true;
+            }
+        }            
 
-        if (this.onGround() && this.mount.stamina === 0) {
-            this.mount.reset();
-            this.mount = null;
-            this.movementType = "control";
-        }
     }
     
     // This function sets the direction of the mount (if it exists) to Kroq's direction
