@@ -16,13 +16,6 @@ class Play extends Phaser.Scene {
         this.timeCounter = 0;
         this.updateRate = 1/120;
 
-        // // Create animations
-        // this.anims.create({
-        //     key: 'bird-flap',
-        //     frames: this.anims.generateFrameNumbers('boogie1', { start: 0, end: 1, first: 0}),
-        //     frameRate: 4,
-        //     repeat: -1,
-        // });
 
         // Set up key inputs
         this.keys = this.input.keyboard.createCursorKeys();

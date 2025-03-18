@@ -19,6 +19,8 @@ class Bird extends Entity {
 
         // If bird has rider
         this.passenger = null;
+
+        this.anims.play('bird-flap-anim');
     }
 
     reset() {
@@ -27,21 +29,40 @@ class Bird extends Entity {
         this.passenger = null;
         this.particleTimer = 0;
         this.flapTimer = 0;
+
+        this.anims.play('bird-flap-anim');
+        this.anims.timeScale = 1;
+
+        // TODO make birds fly back to where they start instead of teleporting
+    }
+
+    mounted(passenger) {
+        this.passenger = passenger;
+        if (!this.endBird) {
+            this.anims.timeScale = 3;
+        }
     }
 
     physicsUpdate() {
-        if (this.passenger !== null && (this.stamina > 0 || this.passenger.vy < 0) && this.flapTimer-- <= 0) {
-            this.flapTimer = 50;
-            this.scene.sound.add("birdFlap").setVolume(0.3).play();
-        }
-        if (this.passenger !== null && (this.stamina > 0 || this.passenger.vy < 0) && this.particleTimer-- <= 0) {
-            this.particleTimer = Entity.randomBetween(9, 12);
-            const particleSprites = ['p1'];
-            const px = this.rx + Entity.randomBetween(-this.w/2, this.w/2);
-            const ps = particleSprites[Math.floor(Math.random()*particleSprites.length)]
-            const pvy = Entity.randomBetween(1, 3);
-            for (let i = 0; i < Math.random()*5+7; i++) {
-                this.scene.entities.push(new Particle(this.scene, px, this.ry + this.w/2 - 4 - i, ps, 0, pvy, 0, Entity.randomBetween(30, 60)));
+        if (this.passenger !== null && (this.stamina > 0 || this.passenger.vy < 0)) {
+            if (this.flapTimer-- <= 0) {
+                this.flapTimer = 50;
+                this.scene.sound.add("birdFlap").setVolume(0.3).play();
+            }
+            if (this.particleTimer-- <= 0) {
+                this.particleTimer = Entity.randomBetween(9, 12);
+                const particleSprites = ['p1'];
+                const px = this.rx + Entity.randomBetween(-this.w/2, this.w/2);
+                const ps = particleSprites[Math.floor(Math.random()*particleSprites.length)]
+                const pvy = Entity.randomBetween(1, 3);
+                for (let i = 0; i < Math.random()*5+7; i++) {
+                    this.scene.entities.push(new Particle(this.scene, px, this.ry + this.w/2 - 4 - i, ps, 0, pvy, 0, Entity.randomBetween(30, 60)));
+                }
+            }
+        } else if (this.passenger !== null) {
+            if (this.anims.isPlaying) {
+                this.anims.stop('bird-flap-anim');
+                this.anims.setCurrentFrame(this.anims.currentAnim.frames[0]);
             }
         }
     }

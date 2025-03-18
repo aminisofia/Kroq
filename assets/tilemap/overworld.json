@@ -360,6 +360,18 @@
                  "width":0,
                  "x":2267,
                  "y":297
+                }, 
+                {
+                 "height":0,
+                 "id":16,
+                 "name":"bird-spawn",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":2156,
+                 "y":346
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -368,7 +380,7 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":16,
+ "nextobjectid":17,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",

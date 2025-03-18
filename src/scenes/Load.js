@@ -30,6 +30,38 @@ class Load extends Phaser.Scene {
         this.load.image('heart', 'assets/sprites/heart.png');
         this.load.image('x', 'assets/sprites/x.png');
 
+        // Load and create animations
+        this.load.spritesheet('kroq-idle-sheet', 'assets/sprites/baseKroqIdle-Sheet.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 2
+        })
+        this.load.spritesheet('kroq-run-sheet', 'assets/sprites/baseKroqRunning-Sheet.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 2
+        })
+        this.load.spritesheet('kroq-jump-sheet', 'assets/sprites/baseKroqJumping-Sheet.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 2
+        })
+        this.load.spritesheet('kroq-fall-sheet', 'assets/sprites/baseKroqFalling-Sheet.png', {
+            frameWidth: 16,
+            frameHeight: 16,
+            startFrame: 0,
+            endFrame: 2
+        })
+        this.load.spritesheet('bird-flap-sheet', 'assets/sprites/bird-Sheet.png', {
+            frameWidth: 16,
+            frameHeight: 18,
+            startFrame: 0,
+            endFrame: 2
+        })
+        
         this.load.image('p1', 'assets/sprites/smallParticle.png');
         this.load.image('p2', 'assets/sprites/mediumParticle.png');
         this.load.image('p3', 'assets/sprites/largeParticle.png');
@@ -53,6 +85,47 @@ class Load extends Phaser.Scene {
     }
 
     create() {
+        this.anims.create({
+            key: 'kroq-idle-anim',
+            frames: this.anims.generateFrameNumbers('kroq-idle-sheet', { 
+                frames: [0, 1, 2, 1]
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'kroq-run-anim',
+            frames: this.anims.generateFrameNumbers('kroq-run-sheet', { 
+                frames: [0, 1, 2, 1]
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'kroq-jump-anim',
+            frames: this.anims.generateFrameNumbers('kroq-jump-sheet', { 
+                frames: [0, 1, 2, 1]
+            }),
+            frameRate: 4,
+            repeat: 0,
+        });
+        this.anims.create({
+            key: 'kroq-fall-anim',
+            frames: this.anims.generateFrameNumbers('kroq-fall-sheet', { 
+                frames: [0, 1, 2, 1]
+            }),
+            frameRate: 4,
+            repeat: 0,
+        });
+        this.anims.create({
+            key: 'bird-flap-anim',
+            frames: this.anims.generateFrameNumbers('bird-flap-sheet', { 
+                frames: [0, 1, 2, 1] 
+            }),
+            frameRate: 4,
+            repeat: -1,
+        });
+
         this.scene.start('menuScene');
     }
 }

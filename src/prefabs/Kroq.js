@@ -1,6 +1,8 @@
 class Kroq extends Entity {
     constructor(scene, x, y) {
-        super(scene, x, y, "kroq", 12, 12);
+        super(scene, x, y, "kroq-idle-sheet", 12, 12);
+
+        this.setAnimation("idle")
 
         // Set up settings for player
 
@@ -126,6 +128,21 @@ class Kroq extends Entity {
                 return;
             }
         })
+        if (this.mount === null) {
+            if (this.onGround()) {
+                if (this.vx === 0 && dx === 0) {
+                    this.setAnimation("idle");
+                } else {
+                    this.setAnimation("run");
+                }
+            } else {
+                if (this.vy < 0) {
+                    this.setAnimation("jump");
+                } else {
+                    this.setAnimation("fall");
+                }
+            }
+        }
     }
 
     // This function puts Kroq on a bird
@@ -137,12 +154,29 @@ class Kroq extends Entity {
         this.mount.ry = this.ry + 9; // TODO kroq isn't lining up with bird for some reason
 
         this.mount.setScale(this.scaleX, 1)
-        this.mount.passenger = this;
+        this.mount.mounted(this);
 
         this.onGroundTimer = this.maxOnGroundTimer;
 
+        this.setAnimation("idle", false)
+
         if (bird.endBird) {
             UI.instance.fadeToBlack();
+        }
+    }
+
+    // Animation helper function. Options are: idle, run, jump, fall
+    setAnimation(anim, playing = true) {
+        const sheetName = "kroq-" + anim + "-sheet"
+        const animName = "kroq-" + anim + "-anim";
+        if (this.anims.getName() !== animName) {
+            this.setTexture(sheetName);
+            this.play(animName);
+        }
+        if (!playing && this.anims.isPlaying) {
+            this.stop(animName);
+        } else if (playing && !this.anims.isPlaying) {
+            this.play(animName);
         }
     }
 
@@ -214,3 +248,5 @@ class Kroq extends Entity {
     //     }
     // }
 }
+
+// TODO - kroq sometimes goes into ground >:(
