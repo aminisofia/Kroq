@@ -60,7 +60,7 @@ class Load extends Phaser.Scene {
             frameWidth: 16,
             frameHeight: 18,
             startFrame: 0,
-            endFrame: 2
+            endFrame: 3
         })
         
         this.load.image('p1', 'assets/sprites/smallParticle.png');
