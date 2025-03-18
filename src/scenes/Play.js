@@ -16,6 +16,14 @@ class Play extends Phaser.Scene {
         this.timeCounter = 0;
         this.updateRate = 1/120;
 
+        // // Create animations
+        // this.anims.create({
+        //     key: 'bird-flap',
+        //     frames: this.anims.generateFrameNumbers('boogie1', { start: 0, end: 1, first: 0}),
+        //     frameRate: 4,
+        //     repeat: -1,
+        // });
+
         // Set up key inputs
         this.keys = this.input.keyboard.createCursorKeys();
         this.keys.A = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -41,16 +49,24 @@ class Play extends Phaser.Scene {
         this.kroq = new Kroq(this, kroqSpawn.x, kroqSpawn.y-10);
         this.entities.push(this.kroq);
         const birdSpawns = map.filterObjects('Objects', (object) => object.name === 'bird-spawn');
+        // Get the leftmost bird to find the "finish" bird
+        let leftMostBird = null;
         for (let birdSpawn of birdSpawns) {
-            this.entities.push(new Bird(this, birdSpawn.x, birdSpawn.y-10));
+            const bird = new Bird(this, birdSpawn.x, birdSpawn.y-10);
+            this.entities.push(bird);
+            if (leftMostBird === null || bird.rx > leftMostBird.rx) {
+                leftMostBird = bird;
+            }
         }
+        leftMostBird.endBird = true;
         const starSpawns = map.filterObjects('Objects', (object) => object.name === 'star');
         for (let starSpawn of starSpawns) {
             this.entities.push(new Star(this, starSpawn.x, starSpawn.y));
         }
         this.groundMap = map.createLayer('Ground', tileset);
         map.createLayer('DecoGround', tileset);
-        map.createLayer('Water', tileset);
+        this.waterLayer = map.createLayer('Water', tileset);
+        this.waterLayer.setDepth(20);
 
         this.tilemap = map;
 
@@ -58,12 +74,13 @@ class Play extends Phaser.Scene {
 
         this.scene.launch('uiScene');
         this.scene.bringToTop('uiScene');
-
     }
 
     physicsUpdate() {
         // Update all entities positions
         this.entities.forEach(entity => entity.physicsUpdate());
+
+        UI.instance.physicsUpdate();
     }
 
     visualUpdate() {
@@ -76,13 +93,17 @@ class Play extends Phaser.Scene {
 
         // Handle scene key inputs
         if (Phaser.Input.Keyboard.JustDown(this.keys.R)) {
+            this.scene.stop('uiScene')
             this.scene.start('playScene');
             return;
         }
 
         if (Phaser.Input.Keyboard.JustDown(this.keys.ESC)) {
-            this.scene.start('menuScene');
-            return;
+            if (UI.instance.blackStage === 0 || UI.instance.skipOutro()) {
+                this.scene.stop('uiScene')
+                this.scene.start('menuScene');
+                return;
+            }
         }
 
         // Set up timing for consistent time
@@ -103,5 +124,16 @@ class Play extends Phaser.Scene {
             }
         }
         this.visualUpdate();
+    }
+
+    // Convert the speed running clock to readable format
+    ticksToTime(time) {
+        let seconds = time * this.updateRate;
+        let minutes = seconds / 60;
+        let hours = minutes / 60;
+        seconds %= 60;
+        minutes = Math.floor(minutes);
+        // hours = Math.floor(hours);
+        return minutes + ":" + seconds.toFixed(3);
     }
 }

@@ -20,18 +20,24 @@ class Kroq extends Entity {
         this.maxMoveSpeed = 1;
         this.onGroundTimer = 0;
         this.maxOnGroundTimer = 50;
+        this.particleTimer = 0;
 
         this.mount = null;
 
         this.movementType = "control";
 
         this.graphics.fillStyle(0xff0000, 1);
+
+        // Timer for speedrunning
+        this.gameTimer = 0;
     }
 
     // This function handles all of Kroq's movement
     physicsUpdate() {
 
-        // this.graphics.clear();
+        if (this.gameTimer > 0) {
+            this.gameTimer++;
+        }
         
         if (this.ry > 420) {
             this.scene.scene.start('playScene');
@@ -43,6 +49,10 @@ class Kroq extends Entity {
             this.movementTypeControl();
         } else if (this.movementType === "ridingBird") {
             this.movementTypeRidingBird();
+        }
+
+        if ((this.vx !== 0 || this.vy < 0) && this.gameTimer === 0) {
+            this.gameTimer = 1;
         }
 
         this.move(0, this.vy);
@@ -81,7 +91,7 @@ class Kroq extends Entity {
         if (!this.keyUp() && this.onGround()) {
             this.jumpTimer = 0;
         }
-        if (this.keyUp() && (((this.onGround() || this.coyoteTime > 0) && this.canUseJump) || (this.jumpTimer < this.maxJumpTime))) {
+        if (this.keyUp() && (((this.onGround() || this.coyoteTime > 0) && this.canUseJump) || (this.jumpTimer < this.maxJumpTime))) { // TODO make him not double jump when he hits a wall
             if (this.onGround() || this.coyoteTime > 0) {
                 this.jumpTimer = 0;
                 this.scene.sound.add("kroqJump").setVolume(0.1).play();
@@ -96,6 +106,18 @@ class Kroq extends Entity {
         }
         if (!this.onGround()) {
             this.jumpTimer++;
+        }
+
+        if (this.onGround() && this.vx !== 0 && this.particleTimer-- <= 0 && Math.sign(dx) === Math.sign(this.vx)) {
+            this.particleTimer = Entity.randomBetween(20, 30);
+            const particleSprites = ['p1', 'p2', 'p3'];
+            this.scene.entities.push(new Particle(this.scene, this.rx + -Math.sign(this.vx)*5, this.ry + this.w/2 - 1, particleSprites[Math.floor(Math.random()*particleSprites.length)], -Math.sign(this.vx)*0.1, -Entity.randomBetween(0.2,0.5), 0.02, Entity.randomBetween(20, 30)));
+        }
+
+        if (this.onGround() && dx !== 0  && (Math.sign(dx) !== Math.sign(this.vx))) {
+            this.particleTimer = 25;
+            const particleSprites = ['p1', 'p2', 'p3'];
+            this.scene.entities.push(new Particle(this.scene, this.rx + -Math.sign(dx)*5, this.ry + this.w/2 - 1, particleSprites[Math.floor(Math.random()*particleSprites.length)], -Math.sign(dx)*0.2, -Entity.randomBetween(0.2,0.4), 0.02, Entity.randomBetween(20, 30)));
         }
         
         this.getColliding().forEach(entity => {
@@ -115,23 +137,31 @@ class Kroq extends Entity {
         this.mount.ry = this.ry + 9; // TODO kroq isn't lining up with bird for some reason
 
         this.mount.setScale(this.scaleX, 1)
-
-        this.scene.sound.add("birdFlap").setVolume(0.3).play();
+        this.mount.passenger = this;
 
         this.onGroundTimer = this.maxOnGroundTimer;
+
+        if (bird.endBird) {
+            UI.instance.fadeToBlack();
+        }
     }
 
     // This function is the state machine case for when he is riding on a bird
     movementTypeRidingBird() {
 
-        let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
-        this.vx = Entity.pushyMovement(dx, this.vx, this.mount.flySpeed, this.mount.maxFlySpeed);
+        if (!this.mount.endBird) {
+            let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
+            this.vx = Entity.pushyMovement(dx, this.vx, this.mount.flySpeed, this.mount.maxFlySpeed);
 
-        if (this.mount.stamina > 0) {
-            this.vy = Entity.pushyMovement(-1, this.vy, this.mount.flyUpSpeed, this.mount.maxFlyUpSpeed, this.mount.flyUpSpeed*3);
-            if (this.mount.y <= this.mount.spawnY) this.mount.stamina--;
+            if (this.mount.stamina > 0) {
+                this.vy = Entity.pushyMovement(-1, this.vy, this.mount.flyUpSpeed, this.mount.maxFlyUpSpeed, this.mount.flyUpSpeed*3);
+                if (this.mount.y <= this.mount.spawnY) this.mount.stamina--;
+            } else {
+                this.vy = Entity.pushyMovement(1, this.vy, this.mount.fallSpeed, this.mount.maxFallSpeed);
+            }
         } else {
-            this.vy = Entity.pushyMovement(1, this.vy, this.mount.fallSpeed, this.mount.maxFallSpeed);
+            this.vx = Entity.pushyMovement(1, this.vx, 0.05, 1);
+            this.vy = Entity.pushyMovement(-1, this.vy, 0.01, 1000, this.mount.flyUpSpeed*3);
         }
 
         if (this.onRoof() && this.mount.stamina <= 0) {
@@ -150,7 +180,7 @@ class Kroq extends Entity {
             } else {
                 this.onGroundTimer = true;
             }
-        }            
+        }
 
     }
     

@@ -1,6 +1,6 @@
 class Entity extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, name, w, h) {
-        super(scene, x, y, name);
+        super(scene, Math.floor(x), Math.floor(y), name);
         this.scene = scene;
         this.scene.add.existing(this);
 
@@ -281,5 +281,10 @@ class Entity extends Phaser.GameObjects.Sprite {
             }
         }
         return v;
+    }
+
+    // Helper function for random numbers
+    static randomBetween(min, max) {
+        return Math.random() * (max-min) + min;
     }
 }

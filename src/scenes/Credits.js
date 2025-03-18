@@ -12,9 +12,9 @@ class Credits extends Phaser.Scene {
         this.tintGraphics = this.add.graphics();
 
         // Show credits text
-        this.add.text(0, 0, 'CREDITS\n\nMilo Kesteloot, Sofia Aminifard\nSound: Pixabay\n\nESC to return', {
-            fontFamily: 'picoo',
-            fontSize: '64px',
+        this.add.text(0, 0, 'CREDITS\n\nMilo Kesteloot\nSofia Aminifard\nSound: Pixabay\nFonts: dafont.com\n\nESC to return', {
+            fontFamily: 'pressstart',
+            fontSize: '32px',
             color: '#000000'
         }).setOrigin(0.5, 0.5).setDepth(2)
 
@@ -27,7 +27,18 @@ class Credits extends Phaser.Scene {
         // Key input handeling
         if (Phaser.Input.Keyboard.JustDown(this.keys.ESCKey)) {
             this.scene.start('menuScene');
+            return;
         }
+
+        // This code callibrates the proper scale for the screen size and centers the camera
+        const camera = this.cameras.main;
+        camera.scrollX = -camera.width / 2;
+        camera.scrollY = -camera.height / 2;
+        let desiredHeight = 983.2000122070312; // My monitor height
+        let desiredScale = 1; // My monitor scale
+        let theirHeight = camera.height; // User monitor height
+        let theirScale = (desiredScale / desiredHeight) * theirHeight; // Solve for user scale
+        camera.setZoom(theirScale);
 
         this.tintGraphics.clear();
         this.tintGraphics.fillStyle(0X51A9B5);

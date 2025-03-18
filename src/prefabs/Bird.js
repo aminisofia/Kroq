@@ -1,6 +1,8 @@
 class Bird extends Entity {
     constructor(scene, x, y) {
-        super(scene, x, y, "bird", 16, 18); // TODO actual height is 17 >:(
+        super(scene, x, y, "bird", 16, 18);
+
+        this.setDepth(10);
 
         // Settings for bird
         this.flySpeed = 0.05;
@@ -11,16 +13,36 @@ class Bird extends Entity {
         this.maxFallSpeed = 0.4;
         this.maxStamina = 40;
         this.stamina = this.maxStamina;
+        this.particleTimer = 0;
+        this.flapTimer = 0; // TODO match with bird animation
+        this.endBird = false;
+
+        // If bird has rider
+        this.passenger = null;
     }
 
     reset() {
         super.reset();
         this.stamina = this.maxStamina;
+        this.passenger = null;
+        this.particleTimer = 0;
+        this.flapTimer = 0;
     }
 
     physicsUpdate() {
-        // if (this.onGround()) {
-        //     console.log("ground!");
-        // }
+        if (this.passenger !== null && (this.stamina > 0 || this.passenger.vy < 0) && this.flapTimer-- <= 0) {
+            this.flapTimer = 50;
+            this.scene.sound.add("birdFlap").setVolume(0.3).play();
+        }
+        if (this.passenger !== null && (this.stamina > 0 || this.passenger.vy < 0) && this.particleTimer-- <= 0) {
+            this.particleTimer = Entity.randomBetween(9, 12);
+            const particleSprites = ['p1'];
+            const px = this.rx + Entity.randomBetween(-this.w/2, this.w/2);
+            const ps = particleSprites[Math.floor(Math.random()*particleSprites.length)]
+            const pvy = Entity.randomBetween(1, 3);
+            for (let i = 0; i < Math.random()*5+7; i++) {
+                this.scene.entities.push(new Particle(this.scene, px, this.ry + this.w/2 - 4 - i, ps, 0, pvy, 0, Entity.randomBetween(30, 60)));
+            }
+        }
     }
 }

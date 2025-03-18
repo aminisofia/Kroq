@@ -5,6 +5,10 @@ class Camera {
         this.camera.setBackgroundColor("#51A9B5");
         this.follow = null;
         this.scale = 4;
+
+        // This is for the scrolling water
+        this.waterX = 0;
+        this.waterMoveSpeed = 0.1;
     }
 
     update() {
@@ -18,7 +22,6 @@ class Camera {
 
         this.scale = theirScale;
 
-
         // This code centeres the center of the screen on 0, 0 and follows whatever the variable this.follow is set to
         this.camera.scrollX = -this.camera.width / 2;
         this.camera.scrollY = -this.camera.height / 2;
@@ -30,11 +33,21 @@ class Camera {
             this.camera.scrollY += 346 - 40; // this.follow.y;
         }
         this.camera.setZoom(this.scale);
+
+        // Background paralax with camera
         if (this.scene.backgroundLayer !== undefined) {
             this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale;
         }
         if (this.scene.cloudLayer !== undefined) {
             this.scene.cloudLayer.x = (this.camera.scrollX+this.camera.width/2)/1.5 - this.camera.width/3/this.scale;
+        }
+
+        // Move water animation
+        this.waterX -= this.waterMoveSpeed;
+        while (this.waterX <= -16) this.waterX += 16;
+        
+        if (this.scene.waterLayer !== undefined) {
+            this.scene.waterLayer.x = Math.ceil(this.waterX);
         }
     }
 

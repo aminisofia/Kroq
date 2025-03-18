@@ -25,3 +25,7 @@ let config = {
 let game = new Phaser.Game(config);
 
 let { width, height } = game.config;
+
+// TODO
+// * use at least 5 phaser elements
+// * fix bug where he's sometimes in the ground sometimes not when he lands
