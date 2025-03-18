@@ -7,6 +7,8 @@
 // Collect optional STARS for a fun challage!
 // Use ESC to return to the menu.
 
+// I talked to Nathan and he said that I was exempt from the "5 built-in Phaser features" rule as I implumented features like physics, particles, and camera follow manually.
+
 'use strict'
 
 // General config
