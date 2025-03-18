@@ -10,9 +10,9 @@ class UI extends Phaser.Scene {
     create() {
         // Create all UI elements
         this.hearts = [
-            this.makeHeart(0),
+            this.makeHeart(2),
             this.makeHeart(1),
-            this.makeHeart(2)
+            this.makeHeart(0)
         ]
         // Store text element for star counter to modify later
         this.starText = this.makeStar();
@@ -28,6 +28,9 @@ class UI extends Phaser.Scene {
         this.finalTime = 0;
 
         this.tintGraphics = this.add.graphics();
+
+        this.kroq = Play.instance.kroq;
+        this.healthUpdate = this.kroq.health;
     }
 
     skipOutro() {
@@ -40,6 +43,14 @@ class UI extends Phaser.Scene {
     }
 
     physicsUpdate() {
+
+        while (this.kroq.health < this.healthUpdate) {
+            this.healthUpdate--;
+            if (this.healthUpdate >= 0) {
+                this.hearts[this.healthUpdate].setTexture("heartBroken");
+            }
+        }
+
         this.blackTimer++;
         if (this.blackStage === 1) {
             if (this.blackTimer >= this.blackDelay) {
@@ -63,11 +74,17 @@ class UI extends Phaser.Scene {
 
             if (this.blackTimer === this.textPopin) {
                 // Show credits text
-                this.centerText = this.add.text(this.sys.game.canvas.width/2, this.sys.game.canvas.height/2, 'YOU WIN!\n\nKroq - An Aseprite Adventure!\n\nTime: ' + Play.instance.ticksToTime(this.finalTime), {
-                    fontFamily: 'pressstart',
-                    fontSize: '32px',
-                    color: '#51A9B5'
-                }).setOrigin(0.5, 0.5).setDepth(2)
+                this.centerText = this.add.text(
+                    this.sys.game.canvas.width/2, this.sys.game.canvas.height/2,
+                    'YOU WIN!\n\nKroq - An Aseprite Adventure!\n\nTime: ' +
+                    Play.instance.ticksToTime(this.finalTime) +
+                    "\n\nStars: " + this.kroq.stars + "\n\n\n\nESC to return to menu",
+                    {
+                        fontFamily: 'pressstart',
+                        fontSize: '32px',
+                        color: '#51A9B5'
+                    }
+                ).setOrigin(0.5, 0.5).setDepth(2)
             }
 
             if (this.centerText !== undefined) {
@@ -90,6 +107,7 @@ class UI extends Phaser.Scene {
         heart.scale = scale;
         heart.x = this.cameras.main.width - heart.width*scale - (heart.width+1)*scale*i;
         heart.y = heart.height*scale;
+        return heart;
     }
 
     // Puts the UI star counter text and icon on screen

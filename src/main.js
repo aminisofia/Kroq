@@ -1,7 +1,7 @@
 // Game: Kroq - An Aseprite Adventure!
 // Name: Milo Kesteloot, Sofia Aminifard
 // Date: 03/03/2025
-// Time: ~ 30 Hours
+// Time: ~ 50 Hours
 
 // Controlls: Use WASD or Arrow Keys to move Kroq to the flag at the end!
 // Collect optional STARS for a fun challage!

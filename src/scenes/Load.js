@@ -28,9 +28,10 @@ class Load extends Phaser.Scene {
         this.load.image('bird', 'assets/sprites/bird.png');
         this.load.image('star', 'assets/sprites/star.png');
         this.load.image('heart', 'assets/sprites/heart.png');
+        this.load.image('heartBroken', 'assets/sprites/heartBroken.png');
         this.load.image('x', 'assets/sprites/x.png');
 
-        // Load and create animations
+        // Load spritesheets
         this.load.spritesheet('kroq-idle-sheet', 'assets/sprites/baseKroqIdle-Sheet.png', {
             frameWidth: 16,
             frameHeight: 16,
@@ -84,11 +85,27 @@ class Load extends Phaser.Scene {
         });
     }
 
+    // Helper function to generate frame arrays
+    genFrameArrays(sheet, twoWays) {
+        const totalFrames = this.textures.get(sheet).frameTotal - 1;
+        const frames = [];
+        for (let i = 0; i < totalFrames; i++) {
+            frames.push(i);
+        }
+        if (twoWays) {
+            for (let i = totalFrames - 2; i >= 0; i--) {
+                frames.push(i);
+            }
+        }
+        return frames;
+    }
+
     create() {
+        // Create animations
         this.anims.create({
             key: 'kroq-idle-anim',
             frames: this.anims.generateFrameNumbers('kroq-idle-sheet', { 
-                frames: [0, 1, 2, 1]
+                frames: this.genFrameArrays("kroq-idle-sheet", true)
             }),
             frameRate: 4,
             repeat: -1,
@@ -96,7 +113,7 @@ class Load extends Phaser.Scene {
         this.anims.create({
             key: 'kroq-run-anim',
             frames: this.anims.generateFrameNumbers('kroq-run-sheet', { 
-                frames: [0, 1, 2, 1]
+                frames: this.genFrameArrays("kroq-run-sheet", true)
             }),
             frameRate: 4,
             repeat: -1,
@@ -104,7 +121,7 @@ class Load extends Phaser.Scene {
         this.anims.create({
             key: 'kroq-jump-anim',
             frames: this.anims.generateFrameNumbers('kroq-jump-sheet', { 
-                frames: [0, 1, 2, 1]
+                frames: this.genFrameArrays("kroq-jump-sheet", false)
             }),
             frameRate: 4,
             repeat: 0,
@@ -112,7 +129,7 @@ class Load extends Phaser.Scene {
         this.anims.create({
             key: 'kroq-fall-anim',
             frames: this.anims.generateFrameNumbers('kroq-fall-sheet', { 
-                frames: [0, 1, 2, 1]
+                frames: this.genFrameArrays("kroq-fall-sheet", false)
             }),
             frameRate: 4,
             repeat: 0,
@@ -120,7 +137,7 @@ class Load extends Phaser.Scene {
         this.anims.create({
             key: 'bird-flap-anim',
             frames: this.anims.generateFrameNumbers('bird-flap-sheet', { 
-                frames: [0, 1, 2, 1] 
+                frames: this.genFrameArrays("bird-flap-sheet", true)
             }),
             frameRate: 4,
             repeat: -1,

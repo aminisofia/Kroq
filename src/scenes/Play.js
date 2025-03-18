@@ -38,8 +38,13 @@ class Play extends Phaser.Scene {
         this.cloudLayer = map.createLayer('Clouds', tileset);
         this.backgroundLayer = map.createLayer('Background', tileset);
         map.createLayer('Decoration', tileset);
+        this.checkpoints = map.filterObjects('Objects', (object) => object.name === 'cp');
+        this.checkpoints.forEach(cp => {
+            cp.x += 8;
+            cp.y -= 8;
+        });
         const kroqSpawn = map.findObject('Objects', (object) => object.name === 'kroq-spawn');
-        this.kroq = new Kroq(this, kroqSpawn.x, kroqSpawn.y-10);
+        this.kroq = new Kroq(this, kroqSpawn.x, kroqSpawn.y);
         this.entities.push(this.kroq);
         const birdSpawns = map.filterObjects('Objects', (object) => object.name === 'bird-spawn');
         // Get the leftmost bird to find the "finish" bird
@@ -67,6 +72,8 @@ class Play extends Phaser.Scene {
 
         this.scene.launch('uiScene');
         this.scene.bringToTop('uiScene');
+
+        this.kroq.move(0, 10);
     }
 
     physicsUpdate() {

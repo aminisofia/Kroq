@@ -32,6 +32,26 @@ class Kroq extends Entity {
 
         // Timer for speedrunning
         this.gameTimer = 0;
+
+        this.checkpoint = null;
+        this.checkCheckpoints();
+    }
+
+    // This function finds the players current checkpoint
+    checkCheckpoints() {
+        if (this.checkpoint === null) {
+            let leftCP = null;
+            this.scene.checkpoints.forEach(cp => {
+                if (leftCP === null || cp.x < leftCP.x) leftCP = cp;
+            });
+            this.checkpoint = leftCP;
+        } else {
+            this.scene.checkpoints.forEach(cp => {
+                if (cp.x < this.rx + 14 && cp.x > this.checkpoint.x) {
+                    this.checkpoint = cp;
+                }
+            });
+        }
     }
 
     // This function handles all of Kroq's movement
@@ -42,8 +62,18 @@ class Kroq extends Entity {
         }
         
         if (this.ry > 420) {
-            this.scene.scene.start('playScene');
-            return;
+            this.health--;
+            if (this.health < 0) {
+                this.scene.scene.start('playScene');
+                return;
+            }
+            this.setAnimation("idle");
+            console.log(this.checkpoint)
+            this.rx = this.checkpoint.x;
+            this.ry = this.checkpoint.y;
+            this.vx = 0;
+            this.vy = 0;
+            this.setScale(1, 1);
         }
 
 
@@ -68,6 +98,8 @@ class Kroq extends Entity {
             this.vy = 0;
             this.coyoteTime = this.maxCoyoteTime;
         }
+
+        this.checkCheckpoints();
 
         // this.graphics.fillPoint(this.x, this.y);
 
