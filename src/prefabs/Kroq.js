@@ -78,7 +78,6 @@ class Kroq extends Entity {
                 return;
             }
             this.setAnimation("idle");
-            console.log(this.checkpoint)
             this.rx = this.checkpoint.x;
             this.ry = this.checkpoint.y;
             this.vx = 0;
