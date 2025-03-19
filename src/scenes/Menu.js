@@ -72,7 +72,7 @@ class Menu extends Phaser.Scene {
         this.camera.update();
 
         this.tintGraphics.clear();
-        this.tintGraphics.fillStyle(0X51A9B5, 0.8);
+        this.tintGraphics.fillStyle(0X51A9B5, 0.3);
         this.tintGraphics.fillRect(-this.sys.game.canvas.width/2, -this.sys.game.canvas.height/2, this.sys.game.canvas.width, this.sys.game.canvas.height);
     }
 }
