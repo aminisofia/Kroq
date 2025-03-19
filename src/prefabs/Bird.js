@@ -55,15 +55,12 @@ class Bird extends Entity {
                 const px = this.rx + Entity.randomBetween(-this.w/2, this.w/2);
                 const ps = particleSprites[Math.floor(Math.random()*particleSprites.length)]
                 const pvy = Entity.randomBetween(1, 3);
-                for (let i = 0; i < Math.random()*5+7; i++) {
-                    this.scene.entities.push(new Particle(this.scene, px, this.ry + this.w/2 - 4 - i, ps, 0, pvy, 0, Entity.randomBetween(30, 60)));
-                }
+                // for (let i = 0; i < Math.random()*5+7; i++) {
+                //     this.scene.entities.push(new Particle(this.scene, px, this.ry + this.w/2 - 4 - i, ps, 0, pvy, 0, Entity.randomBetween(30, 60)));
+                // }
             }
         } else if (this.passenger !== null) {
-            if (this.anims.isPlaying) {
-                this.anims.stop('bird-flap-anim');
-                this.anims.setCurrentFrame(this.anims.currentAnim.frames[0]);
-            }
+            this.anims.timeScale = 1;
         }
     }
 }

@@ -1,6 +1,6 @@
 class Kroq extends Entity {
     constructor(scene, x, y) {
-        super(scene, x, y, "kroq-idle-sheet", 12, 12);
+        super(scene, x, y, "kroq-idle-sheet", 12, 14);
 
         this.setAnimation("idle")
 
@@ -57,14 +57,23 @@ class Kroq extends Entity {
     // This function handles all of Kroq's movement
     physicsUpdate() {
 
+        // if (this.keyDownClick()) {
+        //     this.move(0, 0.3333);
+        // }
+        // if (this.keyUpClick()) {
+        //     this.move(0, -0.3333);
+        // }
+        // console.log(this.inGround(), this.ry);
+        // return;
+
         if (this.gameTimer > 0) {
             this.gameTimer++;
         }
         
         if (this.ry > 420) {
             this.health--;
-            if (this.health < 0) {
-                this.scene.scene.start('playScene');
+            if (this.health <= 0) {
+                this.scene.scene.start('menuScene');
                 return;
             }
             this.setAnimation("idle");
@@ -87,6 +96,7 @@ class Kroq extends Entity {
             this.gameTimer = 1;
         }
 
+        // This stops players from having a weird glitch that puts them in the floor
         this.move(0, this.vy);
         this.move(this.vx, 0);
 
@@ -107,6 +117,11 @@ class Kroq extends Entity {
 
     // This function is the state machine case for when he is walking on the ground
     movementTypeControl() {
+
+        if (this.onGround()) {
+            this.ry = Math.ceil(this.ry);
+        }
+
         let dx = (this.keyLeft() ? -1 : 0) + (this.keyRight() ? 1 : 0);
 
         let movementMultiplyer = 1;

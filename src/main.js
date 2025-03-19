@@ -30,4 +30,3 @@ let { width, height } = game.config;
 
 // TODO
 // * use at least 5 phaser elements
-// * fix bug where he's sometimes in the ground sometimes not when he lands

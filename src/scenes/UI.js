@@ -10,9 +10,9 @@ class UI extends Phaser.Scene {
     create() {
         // Create all UI elements
         this.hearts = [
-            this.makeHeart(2),
+            this.makeHeart(0),
             this.makeHeart(1),
-            this.makeHeart(0)
+            this.makeHeart(2)
         ]
         // Store text element for star counter to modify later
         this.starText = this.makeStar();
