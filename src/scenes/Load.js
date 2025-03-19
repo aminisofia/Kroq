@@ -117,7 +117,7 @@ class Load extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('kroq-run-sheet', { 
                 frames: this.genFrameArrays("kroq-run-sheet", true)
             }),
-            frameRate: 4,
+            frameRate: 10,
             repeat: -1,
         });
         this.anims.create({
