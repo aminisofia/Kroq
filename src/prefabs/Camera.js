@@ -1,7 +1,8 @@
 class Camera {
-    constructor(scene, camera) {
+    constructor(scene, camera, xOffset = 0) {
         this.scene = scene;
         this.camera = camera;
+        this.xOffset = xOffset;
         this.camera.setBackgroundColor("#51A9B5");
         this.follow = null;
         this.scale = 4;
@@ -36,10 +37,10 @@ class Camera {
 
         // Background paralax with camera
         if (this.scene.backgroundLayer !== undefined) {
-            this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale;
+            this.scene.backgroundLayer.x = (this.camera.scrollX+this.camera.width/2)/2 - this.camera.width/3/this.scale + this.xOffset;
         }
         if (this.scene.cloudLayer !== undefined) {
-            this.scene.cloudLayer.x = (this.camera.scrollX+this.camera.width/2)/1.5 - this.camera.width/3/this.scale;
+            this.scene.cloudLayer.x = (this.camera.scrollX+this.camera.width/2)/1.5 - this.camera.width/3/this.scale + this.xOffset;
         }
 
         // Move water animation
@@ -47,7 +48,7 @@ class Camera {
         while (this.waterX <= -16) this.waterX += 16;
         
         if (this.scene.waterLayer !== undefined) {
-            this.scene.waterLayer.x = Math.ceil(this.waterX);
+            this.scene.waterLayer.x = Math.ceil(this.waterX) + this.xOffset;
         }
     }
 

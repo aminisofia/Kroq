@@ -31,6 +31,8 @@ class Load extends Phaser.Scene {
         this.load.image('heartBroken', 'assets/sprites/heartBroken.png');
         this.load.image('x', 'assets/sprites/x.png');
 
+        this.load.image('title-text', 'assets/sprites/title.png');
+
         // Load spritesheets
         this.load.spritesheet('kroq-idle-sheet', 'assets/sprites/baseKroqIdle-Sheet.png', {
             frameWidth: 16,

@@ -73,6 +73,7 @@ class Kroq extends Entity {
         if (this.ry > 420) {
             this.health--;
             if (this.health <= 0) {
+                this.scene.scene.stop('uiScene')
                 this.scene.scene.start('menuScene');
                 return;
             }
