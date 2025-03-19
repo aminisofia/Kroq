@@ -279,22 +279,6 @@ class Kroq extends Entity {
             }
         }
     }
-
-    // Test code for idea that we won't implument
-    // movementTypeJump() {
-    //     if (this.keyUpClick() && (this.onGround() || this.coyoteTime > 0 || (this.vx > 0 && this.onRight()) || (this.vx < 0 && this.onLeft()))) {
-    //         this.vy = -this.jumpForce;
-    //         this.coyoteTime = 0;
-
-    //         if (this.vx === 0) {
-    //             this.vx = this.moveSpeed;
-    //         } else if (this.vx > 0 && this.onRight()) {
-    //             this.vx = -this.moveSpeed;
-    //         } else if (this.vx < 0 && this.onLeft()) {
-    //             this.vx = this.moveSpeed;
-    //         }
-    //     }
-    // }
 }
 
 // TODO - kroq sometimes goes into ground >:(
